@@ -19,6 +19,7 @@ const client = new ApolloClient({
 
 test("TeeToReadableStreamLink: stream cancelled before the result arrives", async () => {
   const unhandled: unknown[] = [];
+  const previousOnUnhandledError = config.onUnhandledError;
   config.onUnhandledError = (error) => unhandled.push(error);
   try {
     let controller!: ReadableStreamDefaultController<ReadableStreamLinkEvent>;
@@ -67,6 +68,6 @@ test("TeeToReadableStreamLink: stream cancelled before the result arrives", asyn
     assert.deepStrictEqual(results, [{ data: { hello: "world" } }]);
     assert.ok(completed);
   } finally {
-    config.onUnhandledError = null;
+    config.onUnhandledError = previousOnUnhandledError;
   }
 });
